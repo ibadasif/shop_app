@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../provider/cart.dart';
 import 'package:shop_app/provider/products.dart';
+import '../widgets/badge.dart';
 import '../widgets/products_grid.dart';
 
 enum FilterOptions {
@@ -53,7 +55,17 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
             icon: Icon(
               Icons.more_vert,
             ),
-          )
+          ),
+          Consumer<Cart>(
+            builder: (context, cart, ch) => Badge(
+              child: ch,
+              value: cart.itemCount.toString(),
+            ),
+            child: IconButton(
+              icon: Icon(Icons.shopping_cart),
+              onPressed: () {},
+            ),
+          ),
         ],
       ),
       body: ProductsGrid(_showOnlyFavData),
