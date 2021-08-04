@@ -9,10 +9,17 @@ enum FilterOptions {
   All,
 }
 
-class ProductOverviewScreen extends StatelessWidget {
+class ProductOverviewScreen extends StatefulWidget {
+  @override
+  _ProductOverviewScreenState createState() => _ProductOverviewScreenState();
+}
+
+class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
+  var _showOnlyFavData = false;
+
   @override
   Widget build(BuildContext context) {
-    final productsContainer = Provider.of<Products>(context, listen: false);
+    // final productsContainer = Provider.of<Products>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -23,11 +30,15 @@ class ProductOverviewScreen extends StatelessWidget {
           PopupMenuButton(
             onSelected: (FilterOptions val) {
               print(val);
-              if (val == FilterOptions.Favorites) {
-                productsContainer.showFavOnly();
-              } else {
-                productsContainer.showAll();
-              }
+              setState(() {
+                if (val == FilterOptions.Favorites) {
+                  // productsContainer.showFavOnly();
+                  _showOnlyFavData = true;
+                } else {
+                  // productsContainer.showAll();
+                  _showOnlyFavData = false;
+                }
+              });
             },
             itemBuilder: (_) => [
               PopupMenuItem(
@@ -45,7 +56,7 @@ class ProductOverviewScreen extends StatelessWidget {
           )
         ],
       ),
-      body: ProductsGrid(),
+      body: ProductsGrid(_showOnlyFavData),
     );
   }
 }

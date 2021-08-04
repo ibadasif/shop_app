@@ -37,12 +37,12 @@ class Products with ChangeNotifier {
     ),
   ];
 
-  var _showFavOnly = false;
+  // var _showFavOnly = false;
 
   List<Product> get items {
-    if (_showFavOnly == true) {
-      return _items.where((element) => element.isFavorite).toList();
-    }
+    // if (_showFavOnly == true) {
+    //   return _items.where((element) => element.isFavorite).toList();
+    // }
     return [..._items];
   }
 
@@ -55,13 +55,17 @@ class Products with ChangeNotifier {
     return _items.firstWhere((prod) => prod.id == id);
   }
 
-  void showFavOnly() {
-    _showFavOnly = true;
-    notifyListeners();
-  }
+  // void showFavOnly() {
+  //   _showFavOnly = true;
+  //   notifyListeners();
+  // }
 
-  void showAll() {
-    _showFavOnly = false;
-    notifyListeners();
+  // void showAll() {
+  //   _showFavOnly = false;
+  //   notifyListeners();
+  // }
+
+  List<Product> get favoriteItems {
+    return _items.where((element) => element.isFavorite).toList();
   }
 }
