@@ -55,6 +55,14 @@ class Cart with ChangeNotifier {
             quantity); //For showing quantity if an item count
   }
 
+  int get totalItemCount {
+    int totalItemsInCart = 0;
+    for (var cartItem in _items.entries) {
+      totalItemsInCart += cartItem.value.quantity;
+    }
+    return totalItemsInCart;
+  }
+
   double get totalAmount {
     var total = 0.0;
     _items.forEach((key, cartItem) {
