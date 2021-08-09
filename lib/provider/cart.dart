@@ -47,12 +47,12 @@ class Cart with ChangeNotifier {
   }
 
   int get itemCount {
-    return _items.length; //For showing only products count
-    // return _items.values.fold(
-    //     0,
-    //     (quantity, cartItem) =>
-    //         cartItem.quantity +
-    //         quantity); //For showing quantity if an item count
+    // return _items.length; //For showing only products count
+    return _items.values.fold(
+        0,
+        (quantity, cartItem) =>
+            cartItem.quantity +
+            quantity); //For showing quantity if an item count
   }
 
   int get totalItemCount {
@@ -73,6 +73,11 @@ class Cart with ChangeNotifier {
 
   void removeItem(String productId) {
     _items.remove(productId);
+    notifyListeners();
+  }
+
+  void clear() {
+    _items = {};
     notifyListeners();
   }
 }
