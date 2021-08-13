@@ -110,4 +110,30 @@ class Products with ChangeNotifier {
     _items.removeWhere((element) => element.id == id);
     notifyListeners();
   }
+
+  Future<void> fetchAndSetProducts() async {
+    const url =
+        'https://flutter-update-b7923-default-rtdb.firebaseio.com/products.json';
+    try {
+      final response = await http.get(url);
+      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      final List<Product> loadedProducts = [];
+      extractedData.forEach((prodId, prodData) {
+        loadedProducts.add(
+          Product(
+            id: prodId,
+            title: prodData['title'],
+            description: prodData['description'],
+            price: prodData['price'],
+            imageUrl: prodData['imageUrl'],
+            isFavorite: prodData['isFavorite'],
+          ),
+        );
+      });
+      _items = _items + loadedProducts;
+      notifyListeners();
+    } catch (error) {
+      throw error;
+    }
+  }
 }
