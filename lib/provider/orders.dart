@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shop_app/widgets/order_item.dart';
 import 'cart.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -52,6 +53,39 @@ class Orders with ChangeNotifier {
         dateTime: timeStamp,
       ),
     );
+    notifyListeners();
+  }
+
+  Future<void> fetchAndSetOrders() async {
+    const url =
+        'https://flutter-update-b7923-default-rtdb.firebaseio.com/orders.json';
+    final response = await http.get(url);
+    final List<OrderItem> loadedorders = [];
+    final extractedData = json.decode(response.body) as Map<String, dynamic>;
+    if (extractedData == null) {
+      return;
+    }
+    extractedData.forEach((orderId, orderData) {
+      loadedorders.add(
+        OrderItem(
+            id: orderId,
+            amount: orderData['amount'],
+            products: (orderData['products'] as List<dynamic>)
+                .map(
+                  (items) => CartItem(
+                    id: items['id'],
+                    title: items['title'],
+                    quantity: items['quantity'],
+                    price: items['price'],
+                  ),
+                )
+                .toList(),
+            dateTime: DateTime.parse(
+              orderData['datetime'],
+            )),
+      );
+    });
+    _orders = loadedorders.reversed.toList();
     notifyListeners();
   }
 }
